@@ -18,7 +18,7 @@ class Database:
         self.cur = self.con.cursor()
 
     def list_utilization(self):
-        self.cur.execute("SELECT * FROM utilization")
+        self.cur.execute("SELECT * FROM utilization ORDER BY Datetime DESC LIMIT 1")
         result = self.cur.fetchall()
         return result
 
