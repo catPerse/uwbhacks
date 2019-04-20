@@ -47,7 +47,10 @@ def utilization():
         south1 = db.south()
         return util, north1, south1
     res, sorted_north, sorted_south = db_query()
-    return render_template("index.html", result=res, north=sorted_north[0], south=sorted_south[0])
+    print(sorted_north[0])
+    return render_template("index.html", result=res, north=sorted_north,
+                           south=sorted_south, n_percent=(north - sorted_north[0].get('North_util'))/north*100,
+                           s_percent=(south - sorted_south[0].get('South_util'))/south*100)
 
 
 if __name__ == '__main__':
