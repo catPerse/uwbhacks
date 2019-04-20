@@ -4,9 +4,7 @@ app = Flask(__name__)
 
 north = 1000
 south = 1200
-n_latest = 0
-s_latest = 0
-length = 0
+
 
 
 class Database:
@@ -24,15 +22,32 @@ class Database:
         result = self.cur.fetchall()
         return result
 
+    def north(self):
+        self.cur.execute("SELECT North_util FROM utilization ORDER BY Datetime DESC LIMIT 1")
+        result = self.cur.fetchall()
+        return result
+    # @staticmethod
+    # def db_length(self):
+    #     db = Database()
+    #     length = len(db.list_utilization())
+    #     return length
+
+    def south(self):
+        self.cur.execute("SELECT South_util FROM utilization ORDER BY Datetime DESC LIMIT 1")
+        result = self.cur.fetchall()
+        return result
+
 
 @app.route('/')
 def utilization():
     def db_query():
         db = Database()
         util = db.list_utilization()
-        return util
-    res = db_query()
-    return render_template("index.html", result=res)
+        north1 = db.north()
+        south1 = db.south()
+        return util, north1, south1
+    res, sorted_north, sorted_south = db_query()
+    return render_template("index.html", result=res, north=sorted_north[0], south=sorted_south[0])
 
 
 if __name__ == '__main__':
